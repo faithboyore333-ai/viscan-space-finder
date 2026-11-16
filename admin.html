@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VISCAN | Admin Dashboard</title>
+
+  <link rel="stylesheet" href="admin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- =====================================
+       ADMIN LOGIN
+  ====================================== -->
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+
+      <!-- Updated logo container -->
+      <div class="login-logo">
+  <img src="assets/viscan-logo.png" alt="VISCAN Logo">
+</div>
+
+      <h1>Admin Login</h1>
+      <p>Sign in to manage VISCAN bookings and venue availability.</p>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <p id="loginError" class="error-message"></p>
+
+        <button type="submit" class="primary-btn login-btn">
+          Login
+        </button>
+
+      </form>
+
+      <a href="index.html" class="back-link">
+        ← Back to VISCAN Website
+      </a>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================
+       ADMIN DASHBOARD
+  ====================================== -->
+
+  <div id="dashboard" class="dashboard-layout hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar" class="sidebar">
+
+      <div class="sidebar-brand">
+        <img src="assets/viscan-logo.png" alt="VISCAN Logo">
+
+        <div>
+          <h2>VISCAN</h2>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+
+        <button
+          type="button"
+          class="nav-link active"
+          data-section="overview"
+        >
+          <span>▦</span>
+          Dashboard
+        </button>
+
+        <button
+          type="button"
+          class="nav-link"
+          data-section="bookings"
+        >
+          <span>▤</span>
+          Bookings
+        </button>
+
+        <button
+          type="button"
+          class="nav-link"
+          data-section="availability"
+        >
+          <span>▣</span>
+          Venue Availability
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <a href="index.html" class="nav-link back-website">
+          <span>↗</span>
+          Visit Website
+        </a>
+
+        <button
+          type="button"
+          id="logoutBtn"
+          class="nav-link logout-btn"
+        >
+          <span>⇥</span>
+          Logout
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+      <!-- TOP HEADER -->
+
+      <header class="top-header">
+
+        <button
+          type="button"
+          id="menuToggle"
+          class="menu-toggle"
+          aria-label="Toggle menu"
+        >
+          ☰
+        </button>
+
+        <div>
+          <h1 id="pageTitle">Dashboard Overview</h1>
+          <p>Welcome to the VISCAN administration panel.</p>
+        </div>
+
+        <div class="admin-profile">
+          <span class="admin-avatar">A</span>
+
+          <div>
+            <strong>Administrator</strong>
+            <small>Admin Account</small>
+          </div>
+        </div>
+
+      </header>
+
+
+      <!-- =================================
+           DASHBOARD OVERVIEW
+      ================================== -->
+
+      <section id="overviewSection" class="dashboard-section">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Dashboard Overview</h2>
+            <p>Monitor your booking activities and requests.</p>
+          </div>
+
+          <button
+            type="button"
+            id="refreshOverview"
+            class="secondary-btn"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+
+        <!-- STATISTICS CARDS -->
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">▤</div>
+            <div>
+              <p>Total Bookings</p>
+              <h2 id="totalBookings">0</h2>
+            </div>
+          </div>
+
+          <div class="stat-card pending-card">
+            <div class="stat-icon">◷</div>
+            <div>
+              <p>Pending Bookings</p>
+              <h2 id="pendingBookings">0</h2>
+            </div>
+          </div>
+
+          <div class="stat-card approved-card">
+            <div class="stat-icon">✓</div>
+            <div>
+              <p>Approved Bookings</p>
+              <h2 id="approvedBookings">0</h2>
+            </div>
+          </div>
+
+          <div class="stat-card cancelled-card">
+            <div class="stat-icon">×</div>
+            <div>
+              <p>Cancelled / Rejected</p>
+              <h2 id="cancelledBookings">0</h2>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- RECENT BOOKINGS -->
+
+        <div class="content-card">
+
+          <div class="card-heading">
+
+            <div>
+              <h2>Recent Bookings</h2>
+              <p>Latest booking requests submitted through VISCAN.</p>
+            </div>
+
+            <button
+              type="button"
+              class="text-btn"
+              data-go="bookings"
+            >
+              View All →
+            </button>
+
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Venue</th>
+                  <th>Date and Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="recentBookingsBody">
+                <tr>
+                  <td colspan="4" class="empty-cell">
+                    No booking records found.
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+        </div>
+
+        <footer class="dashboard-footer">
+          © <span id="currentYear"></span> VISCAN Space Finder. All rights reserved.
+        </footer>
+
+      </section>
+
+
+      <!-- =================================
+           BOOKING MANAGEMENT
+      ================================== -->
+
+      <section id="bookingsSection" class="dashboard-section hidden">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Booking Management</h2>
+            <p>Review, approve, reject, and manage booking requests.</p>
+          </div>
+
+          <button
+            type="button"
+            id="refreshBookings"
+            class="secondary-btn"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+
+        <!-- SEARCH AND FILTER -->
+
+        <div class="filter-card">
+
+          <div class="search-group">
+            <label for="bookingSearch">Search Bookings</label>
+
+            <input
+              type="search"
+              id="bookingSearch"
+              placeholder="Search client, venue, date, or time..."
+            >
+          </div>
+
+          <div class="filter-group">
+            <label for="statusFilter">Filter by Status</label>
+
+            <select id="statusFilter">
+              <option value="all">All Bookings</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+        </div>
+
+
+        <!-- BOOKINGS TABLE -->
+
+        <div class="content-card">
+
+          <div class="card-heading">
+            <div>
+              <h2>All Booking Requests</h2>
+              <p>Booking details and requested time slots.</p>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Venue</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Guests</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="bookingsTableBody">
+                <tr>
+                  <td colspan="7" class="empty-cell">
+                    No booking records found.
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+        </div>
+
+        <footer class="dashboard-footer">
+          © <span id="currentYear"></span> VISCAN Space Finder. All rights reserved.
+        </footer>
+
+      </section>
+
+
+      <!-- =================================
+           VENUE AVAILABILITY MANAGEMENT
+      ================================== -->
+
+      <section id="availabilitySection" class="dashboard-section hidden">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Venue Availability</h2>
+            <p>Manage dates when venues are unavailable for booking.</p>
+          </div>
+
+          <button
+            type="button"
+            id="refreshAvailability"
+            class="secondary-btn"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+
+        <!-- BLOCK DATE FORM -->
+
+        <div class="content-card availability-form-card">
+
+          <div class="card-heading">
+            <div>
+              <h2>Block a Venue Date</h2>
+              <p>Temporarily make a venue unavailable for the entire selected date.</p>
+            </div>
+          </div>
+
+          <form id="availabilityForm">
+
+            <div class="form-grid">
+
+              <div class="form-group">
+                <label for="availabilityVenue">Select Venue</label>
+
+                <select id="availabilityVenue" required>
+                  <option value="">Choose a venue</option>
+                  <option value="VSU Gymnatorium">VSU Gymnatorium</option>
+                  <option value="Convention Center">Convention Center</option>
+                  <option value="Center for Continuing Education">Center for Continuing Education</option>
+                  <option value="Function Room (2nd floor)">Function Room (2nd floor)</option>
+                  <option value="Beach Garden">Beach Garden</option>
+                  <option value="RDE Hall">RDE Hall</option>
+                  <option value="VSU Pavilion">VSU Pavilion</option>
+                </select>
+              </div>
+
+
+              <div class="form-group">
+                <label for="availabilityDate">Select Date</label>
+
+                <input
+                  type="date"
+                  id="availabilityDate"
+                  required
+                >
+              </div>
+
+
+              <div class="form-group full-width">
+                <label for="availabilityReason">Reason (Optional)</label>
+
+                <textarea
+                  id="availabilityReason"
+                  rows="3"
+                  placeholder="Enter the reason for blocking this date..."
+                ></textarea>
+              </div>
+
+            </div>
+
+            <button type="submit" class="primary-btn">
+              Block Selected Date
+            </button>
+
+          </form>
+
+        </div>
+
+
+        <!-- BLOCKED DATES -->
+
+        <div class="content-card">
+
+          <div class="card-heading">
+            <div>
+              <h2>Blocked Dates</h2>
+              <p>View and reopen dates that have been marked unavailable.</p>
+            </div>
+          </div>
+
+          <div id="blockedDatesList" class="blocked-dates-list">
+            <p class="empty-message">No manually blocked dates.</p>
+          </div>
+
+        </div>
+
+        <footer class="dashboard-footer">
+          © <span id="currentYear"></span> VISCAN Space Finder. All rights reserved.
+        </footer>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script src="admin.js"></script>
+
+</body>
+</html>

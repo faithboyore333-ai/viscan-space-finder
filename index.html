@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find and request event spaces at Visayas State University.">
+  <title>VISCAN Space Finder | VSU</title>
+  <link rel="icon" type="image/png" href="assets/site_logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="#" onclick="showPage('home');return false" aria-label="VISCAN Space Finder home">
+    <img src="assets/viscan-logo.png" alt="VISCAN logo">
+  </a>
+
+  <button class="menu-toggle" aria-label="Toggle navigation"
+    onclick="document.querySelector('.main-nav').classList.toggle('open')">☰</button>
+
+  <nav class="main-nav">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('spaces')">Find a Space</button>
+    <button onclick="showPage('map')">Campus Map</button>
+    <button onclick="showPage('bookings')">My Bookings</button>
+    <button class="nav-cta" onclick="showPage('list')">List a Space</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ========================================
+     HOME PAGE
+======================================== -->
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">VISAYAS STATE UNIVERSITY</span>
+      <h1>Find the right space<br><em>for every event.</em></h1>
+      <p>One platform for every event space on campus</p>
+
+      <div class="hero-search">
+        <label>Event or venue
+          <input id="homeSearch" type="search" placeholder="e.g. seminar, gymnatorium">
+        </label>
+
+        <label>Event date
+          <input id="homeDate" type="date">
+        </label>
+
+        <label>Number of guests
+          <input id="homeGuests" type="number" min="1" placeholder="e.g. 100">
+        </label>
+
+        <button class="btn btn-primary" onclick="searchFromHome()">
+          Find a Space <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-note">
+      <span class="pin">⌖</span>
+      <span>Explore campus venues<br><strong>Compare rates and facilities</strong></span>
+    </div>
+  </div>
+
+  <section class="section-wrap">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow green">EXPLORE VSU</span>
+        <h2>Available event spaces</h2>
+        <p>Browse the facilities listed for campus events and activities.</p>
+      </div>
+      <button class="text-link" onclick="showPage('spaces')">View all spaces →</button>
+    </div>
+
+    <div id="featuredGrid" class="venue-grid"></div>
+  </section>
+
+  <section class="benefits">
+    <div>
+      <span class="benefit-icon">⌕</span>
+      <h3>Discover</h3>
+      <p>Explore event spaces and review the information available for each venue.</p>
+    </div>
+
+    <div>
+      <span class="benefit-icon">₱</span>
+      <h3>Compare</h3>
+      <p>Check published rental rates and distinguish VSU and external-client pricing.</p>
+    </div>
+
+    <div>
+      <span class="benefit-icon">▣</span>
+      <h3>Request</h3>
+      <p>Send a booking request with your event details for venue coordination.</p>
+    </div>
+  </section>
+</section>
+
+
+<!-- ========================================
+     FIND A SPACE PAGE
+======================================== -->
+
+<section id="spaces" class="page section-wrap">
+  <div class="page-intro">
+    <span class="eyebrow green">VENUE DIRECTORY</span>
+    <h1>Find a Space</h1>
+    <p>Search the seven venues included in the VSU venue information.</p>
+  </div>
+
+  <div class="filter-panel">
+    <label>Search venue
+      <input id="venueSearch" type="search"
+        placeholder="Search by venue or facility..."
+        oninput="filterVenues()">
+    </label>
+
+    <label>Capacity
+      <select id="capacityFilter" onchange="filterVenues()">
+        <option value="">Any capacity</option>
+        <option value="500">500+ people</option>
+        <option value="1000">1,000+ people</option>
+      </select>
+    </label>
+
+    <label>Client type
+      <select id="clientFilter" onchange="filterVenues()">
+        <option value="">All client categories</option>
+        <option value="student">VSU students / organizations</option>
+        <option value="external">External clients</option>
+      </select>
+    </label>
+
+    <button class="btn btn-outline" onclick="clearFilters()">Clear filters</button>
+  </div>
+
+  <p id="resultCount" class="result-count" aria-live="polite"></p>
+  <div id="venueGrid" class="venue-grid"></div>
+</section>
+
+
+<!-- ========================================
+     VENUE DETAILS PAGE
+======================================== -->
+
+<section id="details" class="page section-wrap">
+  <button class="back-link" onclick="showPage('spaces')">← Back to spaces</button>
+  <div id="venueDetails"></div>
+</section>
+
+
+<!-- ========================================
+     CAMPUS MAP PAGE
+======================================== -->
+
+
+<section id="map" class="page section-wrap">
+  <div class="page-intro">
+    <span class="eyebrow green">LOCATION GUIDE</span>
+    <h1>Campus Map</h1>
+    <p>Select a numbered venue marker to view the venue details.</p>
+  </div>
+
+  <div class="map-layout">
+    <div class="campus-map-real">
+      <iframe
+        src="https://www.google.com/maps/d/u/0/embed?mid=1oapoIBvUn4XwbyqfsvMigpSWFXZLfnM&ehbc=2E312F&noprof=1"
+        width="100%"
+        height="520"
+        style="border: 0;"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <aside class="map-legend">
+      <h3>Venue locations</h3>
+      <p class="muted">Select a venue to view its information.</p>
+
+      <ol id="mapVenueList">
+        <li>VSU Gymnatorium</li>
+        <li>Convention Center</li>
+        <li>Center for Continuing Education</li>
+        <li>Function Room (2nd floor)</li>
+        <li>Beach Garden</li>
+        <li>RDE Hall</li>
+        <li>VSU Pavilion</li>
+      </ol>
+
+      <small>
+        Note: The Center for Continuing Education and Function Room
+        share the same map coordinates.
+      </small>
+    </aside>
+
+  </div> <!-- Close map-layout -->
+
+</section> <!-- Close map page -->
+
+
+<!-- ========================================
+     MY BOOKINGS PAGE
+======================================== -->
+
+<section id="bookings" class="page section-wrap">
+  <div class="page-intro">
+    <span class="eyebrow green">YOUR REQUESTS</span>
+    <h1>My Bookings</h1>
+    <p>Booking requests submitted in this browser will appear here.</p>
+  </div>
+
+  <p id="bookingPageMessage" class="notice" role="status" aria-live="polite" hidden></p>
+
+  <div id="bookingList" class="booking-list">
+    <div class="empty-state">
+      You have no booking requests yet. Find a venue and submit a request to get started.
+    </div>
+  </div>
+
+  <p class="notice">
+    This prototype stores requests only in this browser. It does not transmit
+    bookings to VSU or confirm venue availability.
+  </p>
+</section>
+
+
+<!-- ========================================
+     LIST A SPACE PAGE
+======================================== -->
+
+<section id="list" class="page section-wrap">
+  <div class="page-intro">
+    <span class="eyebrow green">VENUE COORDINATION</span>
+    <h1>List a Space</h1>
+    <p>Submit a facility suggestion for review. This form does not publish a venue automatically.</p>
+  </div>
+
+  <form class="form-card" id="listingForm">
+    <label>Venue / facility name
+      <input name="venueName" required placeholder="Enter venue name">
+    </label>
+
+    <div class="form-row">
+      <label>Location on campus
+        <input name="location" placeholder="Building / area">
+      </label>
+
+      <label>Estimated capacity
+        <input name="capacity" type="number" min="1" placeholder="Number of people">
+      </label>
+    </div>
+
+    <label>Facilities available
+      <textarea name="facilities" rows="3"
+        placeholder="List equipment, amenities, and other facilities"></textarea>
+    </label>
+
+    <label>Additional information
+      <textarea name="description" rows="4"
+        placeholder="Describe the space and its intended use"></textarea>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Submit for review</button>
+    <p id="listingMessage" class="form-message" aria-live="polite"></p>
+  </form>
+</section>
+
+</main>
+
+
+<!-- ========================================
+     FOOTER
+======================================== -->
+
+<footer>
+  <div class="footer-inner">
+    <img src="assets/viscan-logo.png" alt="VISCAN Space Finder">
+    <p>One platform for every event space on campus</p>
+    <small>Visayas State University · Vacant Space Finder prototype</small>
+  </div>
+</footer>
+
+
+<!-- ========================================
+     BOOKING MODAL
+======================================== -->
+
+<div id="bookingModal" class="modal" role="dialog"
+  aria-modal="true" aria-labelledby="bookingTitle">
+
+  <div class="modal-card">
+    <button class="modal-close" aria-label="Close" onclick="closeBooking()">×</button>
+
+    <span class="eyebrow green">BOOKING REQUEST</span>
+    <h2 id="bookingTitle">Request this venue</h2>
+    <p id="modalVenueName" class="muted"></p>
+
+    <form id="bookingForm" novalidate>
+
+      <!-- Hidden venue name -->
+      <input type="hidden" name="venue">
+
+      <!-- CUSTOMER INFORMATION -->
+
+      <div class="booking-form-section">
+        <h3>Customer Information</h3>
+
+        <label>Full name
+          <input name="name" required autocomplete="name">
+        </label>
+
+        <label>Client category
+          <select name="clientType" required>
+            <option value="student">VSU student / employee / organization</option>
+            <option value="external">External client</option>
+          </select>
+        </label>
+
+        <label>Organization / department
+          <input name="organization" placeholder="Optional">
+        </label>
+      </div>
+
+
+      <!-- EVENT INFORMATION -->
+
+      <div class="booking-form-section">
+        <h3>Event Information</h3>
+
+        <label>Preferred date
+          <input name="date" type="date" required>
+        </label>
+
+        <div class="form-row">
+          <label>Start time
+            <input name="startTime" type="time" required>
+          </label>
+
+          <label>End time
+            <input name="endTime" type="time" required>
+          </label>
+        </div>
+
+        <label>Expected guests
+          <input name="guests" type="number" min="1" required>
+        </label>
+
+        <label>Purpose of event
+          <textarea name="purpose" rows="3" required
+            placeholder="Describe the event or activity"></textarea>
+        </label>
+      </div>
+
+
+      <!-- RENTAL OPTIONS AND AMENITIES -->
+
+      <div class="booking-form-section">
+        <h3>Rental Options and Amenities</h3>
+
+        <p class="muted">
+          Select the applicable rental category and additional facilities.
+          The available options depend on the selected venue.
+        </p>
+
+        <!-- Dynamically populated by booking-pricing.js -->
+        <div id="pricingOptions" class="pricing-options"></div>
+      </div>
+
+
+      <!-- PRICE SUMMARY -->
+
+      <div class="booking-form-section">
+        <h3>Estimated Payment</h3>
+
+        <!-- Dynamically calculated by booking-pricing.js -->
+        <div id="priceSummary" class="price-summary" aria-live="polite">
+          <p>Enter your booking details to calculate the estimated cost.</p>
+        </div>
+
+        <p class="price-help">
+          Please note: This is only an estimated amount based on the published
+          rates. Final charges must be confirmed by the VSU venue office.
+          Submitting this request does not confirm your reservation.
+        </p>
+      </div>
+
+
+      <!-- SUBMIT BOOKING -->
+
+      <button class="btn btn-primary full-width" type="submit">
+        Submit booking request
+      </button>
+
+      <p id="bookingMessage" class="form-message muted" role="status" aria-live="polite">
+        Submitting a request does not mean the venue is reserved or confirmed.
+      </p>
+
+    </form>
+  </div>
+</div>
+
+
+<!-- ========================================
+     JAVASCRIPT FILES
+======================================== -->
+
+<script src="script.js"></script>
+
+</body>
+</html>
